@@ -7,7 +7,7 @@ const app = express();
 
 // useful error class to throw
 const { NotFoundError, BadRequestError } = require("./expressError");
-const { findMean } = require("./stats");
+const { findMean, findMedian, findMode } = require("./stats");
 const { convertStrNums } = require('./utils');
 
 const MISSING = "Expected key `nums` with comma-separated list of numbers.";
@@ -21,13 +21,13 @@ app.get("/mean", function (req, res) {
   }
 
   const numsStrings = req.query.nums.split(",");
-  console.log('numsStrings:', numsStrings);
+  // console.log('numsStrings:', numsStrings);
 
   const numsInts = convertStrNums(numsStrings);
-  console.log('numsInts:', numsInts);
+  // console.log('numsInts:', numsInts);
 
   const mean = findMean(numsInts);
-  console.log('mean:', mean);
+  // console.log('mean:', mean);
 
   return res.json({
     "operation": "mean",
@@ -38,10 +38,50 @@ app.get("/mean", function (req, res) {
 
 
 /** Finds median of nums in qs: returns {operation: "median", result } */
+app.get("/median", function (req, res) {
 
+  if (!req.query.nums) {
+    throw new BadRequestError("nums are required");
+  }
+
+  const numsStrings = req.query.nums.split(",");
+  // console.log('numsStrings:', numsStrings);
+
+  const numsInts = convertStrNums(numsStrings);
+  // console.log('numsInts:', numsInts);
+
+  const median = findMedian(numsInts);
+  // console.log('median:', median);
+
+  return res.json({
+    "operation": "median",
+    "value": median,
+  })
+
+})
 
 /** Finds mode of nums in qs: returns {operation: "mean", result } */
+app.get("/mode", function (req, res) {
 
+  if (!req.query.nums) {
+    throw new BadRequestError("nums are required");
+  }
+
+  const numsStrings = req.query.nums.split(",");
+  // console.log('numsStrings:', numsStrings);
+
+  const numsInts = convertStrNums(numsStrings);
+  // console.log('numsInts:', numsInts);
+
+  const mode = findMode(numsInts);
+  // console.log('mode:', mode);
+
+  return res.json({
+    "operation": "mode",
+    "value": mode,
+  })
+
+})
 
 /** 404 handler: matches unmatched routes; raises NotFoundError. */
 app.use(function (req, res) {

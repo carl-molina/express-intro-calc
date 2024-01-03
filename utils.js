@@ -17,15 +17,9 @@ function convertStrNums(strNums) {
       } else {
         throw new BadRequestError(`${x} is not a number`);
       }
-
-    //   try {
-    //     return Number(x);
-    //   } catch {
-    //     throw new BadRequestError(`${x} is not a number`);
-    //   }
     });
-  return numsInts;
-
+  
+    return numsInts;
 }
 
 
